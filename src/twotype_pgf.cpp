@@ -32,12 +32,12 @@ Rcpp::NumericMatrix generate_distribution(double t, double beta1, double nu, dou
   int N = pow(2, 9);
   double R = 0.99745;
 
-  std::complex<double> freq_dat[N][N];
+  std::complex<double>* freq_dat = new std::complex<double>[N*N];
 
   std::complex<double> s1_exp;
   std::complex<double> s2_exp;
 
-
+  int l = 0;
   for(int j = 0; j < N; j++)
   {
     s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
@@ -46,7 +46,8 @@ Rcpp::NumericMatrix generate_distribution(double t, double beta1, double nu, dou
     {
       s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
 
-      freq_dat[j][k] =  A_gf(s1_exp, s2_exp, t, alpha2, lambda2, omega, a, b, c);
+      freq_dat[l] =  A_gf(s1_exp, s2_exp, t, alpha2, lambda2, omega, a, b, c);
+      l += 1;
     }
 
   }
