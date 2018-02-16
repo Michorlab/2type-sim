@@ -1,3 +1,0 @@
-# combine with standard arguments for R
-PKG_CXXFLAGS = -I/usr/local/include -I../inst/include
-PKG_LIBS = -lfftw3 -lm

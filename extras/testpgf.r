@@ -1,33 +1,11 @@
-setwd("~/Dropbox/inv_fourier_pgf")
-
-probs <- read.csv("prob_table.txt", header = F)
-probs <- probs[,-ncol(probs)]
-probs <- as.matrix(probs)
-
-probs[1:10,1:10]
-
-# Generate random numbers
-N <- 3000
-
-x_marg <- rowSums(probs)
-x_marg <- sample(1:ncol(probs), size = N, prob = x_marg, replace = T)
-y_marg <- sapply(x_marg, function(x) sample(1:nrow(probs), size = 1, prob = probs[x,]))
-
-x_marg <- x_marg - 1
-y_marg <- y_marg - 1
+source("~/Dropbox/michor/projects/barcode_passaging_experiment/functions.r")
 
 library(tidyverse)
 expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
 {
+  b_s <- b_s + mu
+  mu <- mu / (b_s + mu)
   num_barcodes <- nrow(cells)
-  # expand all currently resistant cells first according to Durrett (no mutation)
-  resistant_cells <-
-    sapply(cells[, 2], function(x){
-      z <- rbinom(1, x, 1 - alpha(b_r, d_r, passage_time))
-      sum(z + rgeom(z, 1 - beta(b_r, d_r, passage_time)))
-    })
-  cells[, 2] <- 0
-  
   # Gillespie expansion of sensitive cells with mutation
   for(i in 1:num_barcodes)
   {
@@ -43,8 +21,8 @@ expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
       if(curr_time > passage_time) break
       
       # choose next event
-      next_event <- rmultinom(1, 1, c(cells[i,1] * b_s, # sensitive birth and no mutation
-                                      cells[i,1] * mu, # sensitive birth and mutation
+      next_event <- rmultinom(1, 1, c(cells[i,1] * b_s * (1-mu), # sensitive birth and no mutation
+                                      cells[i,1] * b_s * mu, # sensitive birth and mutation
                                       cells[i,1] * d_s, # sensitive death
                                       cells[i,2] * b_r, # res birth
                                       cells[i,2] * d_r)) # res death
@@ -53,8 +31,6 @@ expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
       cells[i,2] <- cells[i,2] + next_event[2,1] + next_event[4,1] - next_event[5,1]
     }
   }
-  # Add in the cells that entered the passage as resistant
-  cells[,2] <- cells[,2] + resistant_cells
   return(cells)
 }
 
@@ -63,15 +39,21 @@ b_1 <- 1
 d_1 <- 0.2
 b_2 <- 1.1
 d_2 <- 0.3
-mu <- 0.01
-N <- 10000
+mu <- 0.1
+domain <- 10
 rho <- 0
-Time <- 4
+Time <- 6
 
-bp <- expand.cells(matrix(c(rep(1, N), rep(0, N)), ncol = 2), 5, b_1, d_1, b_2, d_2, mu)
+pdf <- p2type(Time, 1, d_1, mu, b_2, d_2, domain)
+
+# Generate random numbers
+N <- 5000
+
+bp <- expand.cells(matrix(c(rep(1, N), rep(0, N)), ncol = 2), Time, b_1, d_1, b_2, d_2, mu)
+
+
+plot(ecdf(bp[,1]), pch = "")
+lines(cumsum(rowSums(pdf)), col = "red")
 
 plot(ecdf(bp[,2]), pch = "")
-lines(ecdf(y_marg), pch = "", col = "red")
-
-2^(13*2)
-2^13
+lines(cumsum(colSums(pdf)), col = "red")

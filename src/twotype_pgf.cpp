@@ -1,35 +1,67 @@
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <chrono>
+#include <random>
+#include <cmath>
+#include <Rcpp.h>
+
 #include "twotype_pgf.h"
 #include "complex_functions.H"
 #include "hyp_2F1.cpp"
-#include <Rcpp.h>
+
 // To Run (in terminal): g++-7 -I/usr/local/include twotype_pgf.cpp -lfftw3 -lm -o pgf
 
+//' p2type
+//' 
+//' p2type generates the probability distribution function P_{i,j}(x,y) for
+//' a 2-type branching process with a single type 1 ancestor. Type 1
+//' individuals split with rate alpha1, die with rate beta1 and mutate
+//' to form one type 1 and one type 2 daughter with rate nu. Type 2 individuals
+//' split with rate alpha2 and die with rate beta2.
+//' 
+//' @param t time to run process
+//' @param alpha1 type 1 split rate
+//' @param beta1 type 1 death rate
+//' @param nu type 1 mutation rate (Note: not a probability!)
+//' @param alpha2 type 2 split rate
+//' @param beta2 type 2 death rate
+//' @param domain_size Size of domain of pdf to calculate. p2type calculates
+//'   values of P_{i,j}(x,y) for x,y = {0, 1, ..., 2^domain_size - 1}. Larger
+//'   time requires higher values of N, but slows down computation since a
+//'   2^N x 2^N matrix is created.
+//' @return numeric matrix with (i,j) element representing P_{x,y}(x-1,j-1) since
+//'   (0,0) is included.
+//'   
 // [[Rcpp::export]]
-Rcpp::NumericMatrix generate_distribution(double t, double beta1, double nu, double alpha2, double beta2)
+Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
+                           double alpha2, double beta2, int domain_size)
 {
-  //double alpha1 = 1; 1-type birth rate set to 1
-  //double beta1 = 0.2; // 1-type death rate
-  //double nu = 0.01; // mutation rate
-  //double alpha2 = 1.1; // 2-type birth rate
-  //double beta2 = 0.3; // 2-type death rate
-  //double t = 4.0; // time to run for
+  // Rescale all rates so alpha1 = 1;
+  double scale = alpha1;
+  alpha1 = 1;
+  beta1 /= scale;
+  nu /= scale;
+  alpha2 /= scale;
+  beta2 /= scale;
+  t *= scale;
 
   double lambda1 = 1.0 - beta1 - nu;
   double lambda2 = alpha2 - beta2;
 
-  // old version
+  // Version where mutation isn't split (1 -> 2)
   //double omega = -(lambda1 / 2)+ sqrt(pow(lambda1 / 2, 2) + (nu * lambda2) / alpha2);
   //double a = omega / lambda2;
   //double b = (omega + lambda1) / lambda2;
   //double c = 1.0 + (2 * omega + lambda1) / lambda2;
 
-  // 2-type process with split and mutations
+  // 2-type process with split and mutations (1 -> 1 and 2)
   double omega = -(lambda1 / 2 + (nu * beta2) / (2 * alpha2)) + sqrt(pow(lambda1 / 2 + (nu * beta2) / (2 * alpha2), 2) + (nu * lambda2) / alpha2);
   double a = omega / lambda2;
   double b = (omega + 1.0 - beta1) / lambda2;
   double c = (1.0 + a + b - nu / alpha2);
 
-  int N = pow(2, 9);
+  int N = pow(2, domain_size);
   double R = 0.99745;
 
   std::complex<double>* freq_dat = new std::complex<double>[N*N];
@@ -55,29 +87,31 @@ Rcpp::NumericMatrix generate_distribution(double t, double beta1, double nu, dou
   Rcpp::Rcout << "Finished calculating PGF. Starting Fourier Transform.\n";
 
   fftw_plan plan;
-  plan = fftw_plan_dft_2d(N, N, reinterpret_cast<fftw_complex*>(&freq_dat[0][0]), reinterpret_cast<fftw_complex*>(&freq_dat[0][0]), FFTW_FORWARD, FFTW_ESTIMATE);
+  plan = fftw_plan_dft_2d(N, N, reinterpret_cast<fftw_complex*>(&freq_dat[0]), reinterpret_cast<fftw_complex*>(&freq_dat[0]), FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(plan); /* repeat as needed */
 
   Rcpp::Rcout << "Finished calculating Inverse Fourier Transform. Calculating Probabilities.\n";
 
   Rcpp::NumericMatrix probs(N,N);
+  l = 0;
   for(int j = 0; j < N; j++)
   {
     for(int k = 0; k < N; k++)
     {
-      probs(j, k) = real(freq_dat[j][k] * pow(R, -k-j) / pow(N,2));
+      probs(j, k) = real(freq_dat[l] * pow(R, -k-j) / pow(N,2));
+      l+=1;
     }
   }
 
   fftw_destroy_plan(plan);
-  
+  delete [] freq_dat;
+  freq_dat = NULL;
+
   return probs;
 
 }
 
-
-
-// Supporting Functions
+// Supporting Functions for generating pdf. Found in Antal and Krapivsky (2011).
 std::complex<double> F1(double a, double b, double c, std::complex<double> z)
 {
   std::complex<double> a_(a,0.0);
