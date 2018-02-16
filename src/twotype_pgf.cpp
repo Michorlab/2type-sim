@@ -46,20 +46,22 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   beta2 /= scale;
   t *= scale;
 
-  double lambda1 = 1.0 - beta1 - nu;
+  double lambda1 = 1.0 - beta1 - nu; // Use this one for mutation w/o split
+  //double lambda1 = 1.0 - beta1; // Use this one for split and mutation
   double lambda2 = alpha2 - beta2;
 
   // Version where mutation isn't split (1 -> 2)
-  //double omega = -(lambda1 / 2)+ sqrt(pow(lambda1 / 2, 2) + (nu * lambda2) / alpha2);
-  //double a = omega / lambda2;
-  //double b = (omega + lambda1) / lambda2;
-  //double c = 1.0 + (2 * omega + lambda1) / lambda2;
+  Rcpp::Rcout << "NOTE: Currently mutation is 1 -> 2 and not 1 -> 12";
+  double omega = -(lambda1 / 2)+ sqrt(pow(lambda1 / 2, 2) + (nu * lambda2) / alpha2);
+  double a = omega / lambda2;
+  double b = (omega + lambda1) / lambda2;
+  double c = 1.0 + (2 * omega + lambda1) / lambda2;
 
   // 2-type process with split and mutations (1 -> 1 and 2)
-  double omega = -(lambda1 / 2 + (nu * beta2) / (2 * alpha2)) + sqrt(pow(lambda1 / 2 + (nu * beta2) / (2 * alpha2), 2) + (nu * lambda2) / alpha2);
-  double a = omega / lambda2;
-  double b = (omega + 1.0 - beta1) / lambda2;
-  double c = (1.0 + a + b - nu / alpha2);
+  //double omega = -(lambda1 / 2 + (nu * beta2) / (2 * alpha2)) + sqrt(pow(lambda1 / 2 + (nu * beta2) / (2 * alpha2), 2) + (nu * lambda2) / alpha2);
+  //double a = omega / lambda2;
+  //double b = (omega + 1.0 - beta1) / lambda2;
+  //double c = (1.0 + a + b - nu / alpha2);
 
   int N = pow(2, domain_size);
   double R = 0.99745;
@@ -125,8 +127,8 @@ std::complex<double> F2(double a, double b, double c, std::complex<double> z)
   std::complex<double> a_(a,0.0);
   std::complex<double> b_(b,0.0);
   std::complex<double> c_(c,0.0);
-  //return hyp_2F1(-a, -b, 2 - c, z);
-  return hyp_2F1(1.0 + a - c, 1.0 + b - c, 2 - c, z);
+  return hyp_2F1(-a, -b, 2 - c, z);
+  //return hyp_2F1(1.0 + a - c, 1.0 + b - c, 2 - c, z);
 }
 
 std::complex<double> F3(double a, double b, double c, std::complex<double> z)
@@ -142,8 +144,8 @@ std::complex<double> F4(double a, double b, double c, std::complex<double> z)
   std::complex<double> a_(a,0.0);
   std::complex<double> b_(b,0.0);
   std::complex<double> c_(c,0.0);
-  //return a * b / (2 - c) * hyp_2F1(1.0-a, 1.0-b, 3 - c, z);
-  return (1.0 + a - c) * (1.0 + b - c) / (2 - c) * hyp_2F1(2 + a - c, 2 + b - c, 3 - c, z);
+  return a * b / (2 - c) * hyp_2F1(1.0-a, 1.0-b, 3 - c, z);
+  //return (1.0 + a - c) * (1.0 + b - c) / (2 - c) * hyp_2F1(2 + a - c, 2 + b - c, 3 - c, z);
 }
 
 
