@@ -13,11 +13,11 @@ std::complex<double> z(std::complex<double> y, double t, double alpha2, double l
 double z0(double y, double alpha2, double lambda2);
 std::complex<double> z0(std::complex<double> y, double alpha2, double lambda2);
 
-double kappa(double x, double y, double alpha2, double lambda2, double omega);
-std::complex<double> kappa(std::complex<double> x, std::complex<double> y, double alpha2, double lambda2, double omega);
+double kappa(double x, double y, double alpha1, double alpha2, double lambda2, double omega);
+std::complex<double> kappa(std::complex<double> x, std::complex<double> y, double alpha1, double alpha2, double lambda2, double omega);
 
 //double C1(double x, double y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
-std::complex<double> C1(std::complex<double> x, std::complex<double> y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
+std::complex<double> C1(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);
 
 //double A_gf(double x, double y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
-std::complex<double> A_gf(std::complex<double> x, std::complex<double> y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
+std::complex<double> A_gf(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);

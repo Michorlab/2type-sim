@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // p2type
-Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu, double alpha2, double beta2, int domain_size);
-RcppExport SEXP _sim2type_p2type(SEXP tSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP domain_sizeSEXP) {
+Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int domain_size);
+RcppExport SEXP _sim2type_p2type(SEXP tSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP domain_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,14 +17,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< double >::type alpha2(alpha2SEXP);
     Rcpp::traits::input_parameter< double >::type beta2(beta2SEXP);
+    Rcpp::traits::input_parameter< int >::type ancestors(ancestorsSEXP);
     Rcpp::traits::input_parameter< int >::type domain_size(domain_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(p2type(t, alpha1, beta1, nu, alpha2, beta2, domain_size));
+    rcpp_result_gen = Rcpp::wrap(p2type(t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_sim2type_p2type", (DL_FUNC) &_sim2type_p2type, 7},
+    {"_sim2type_p2type", (DL_FUNC) &_sim2type_p2type, 8},
     {NULL, NULL, 0}
 };
 

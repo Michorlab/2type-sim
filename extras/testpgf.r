@@ -1,9 +1,9 @@
 source("~/Dropbox/michor/projects/barcode_passaging_experiment/functions.r")
-
 library(tidyverse)
-expand.cells <- function(cells, passage_time, b_1, d_1, b_2, d_2, mu)
+expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
 {
   num_barcodes <- nrow(cells)
+  
   # Gillespie expansion of sensitive cells with mutation
   for(i in 1:num_barcodes)
   {
@@ -12,59 +12,56 @@ expand.cells <- function(cells, passage_time, b_1, d_1, b_2, d_2, mu)
     {
       if(sum(cells[i,]) == 0) break
       # get current rate and time until next event
-      rate <- cells[i,] %*% c(b_1 + d_1 + mu, b_2 + d_2)
+      rate <- cells[i,] %*% c(b_s + d_s, b_r + d_r)
       next_time <- rexp(1, rate)
       # update current time
       curr_time <- curr_time + next_time
       if(curr_time > passage_time) break
       
       # choose next event
-      next_event <- rmultinom(1, 1, c(cells[i,1] * b_1, # sensitive birth and no mutation
+      next_event <- rmultinom(1, 1, c(cells[i,1] * b_s, # sensitive birth and no mutation
                                       cells[i,1] * mu, # sensitive birth and mutation
-                                      cells[i,1] * d_1, # sensitive death
-                                      cells[i,2] * b_2, # res birth
-                                      cells[i,2] * d_2)) # res death
+                                      cells[i,1] * d_s, # sensitive death
+                                      cells[i,2] * b_r, # res birth
+                                      cells[i,2] * d_r)) # res death
       # update next event
-      #cells[i,1] <- cells[i,1] + next_event[1,1] - next_event[3,1]
-      cells[i,1] <- cells[i,1] + next_event[1,1] - next_event[2,1] - next_event[3,1]
+      cells[i,1] <- cells[i,1] + next_event[1,1] - next_event[3,1]
       cells[i,2] <- cells[i,2] + next_event[2,1] + next_event[4,1] - next_event[5,1]
     }
   }
+  # Add in the cells that entered the passage as resistant
   return(cells)
 }
 
 
-b_1 <- 1
-d_1 <- 0.4
-b_2 <- 1.1
-d_2 <- 0.3
-mu <- 0.1
-domain <- 10
-Time <- 5
+b_1 <- 2
+d_1 <- 0.1
+b_2 <- 1.0
+d_2 <- 0.4
+mu <- 0.01
+N <- 10000
+ancestors <- 3
+rho <- 0
+Time <- 2
 
-pdf <- p2type(Time, 1, d_1, mu, b_2, d_2, domain)
+probs <- p2type(Time, b_1, d_1, mu, b_2, d_2, ancestors, 9)
 
 # Generate random numbers
-N <- 10000
-bp <- expand.cells(matrix(c(rep(1, N), rep(0, N)), ncol = 2), Time, b_1, d_1, b_2, d_2, mu)
+# N <- 3000
+# 
+# x_marg <- rowSums(probs)
+# x_marg <- sample(1:ncol(probs), size = N, prob = x_marg, replace = T)
+# y_marg <- sapply(x_marg, function(x) sample(1:nrow(probs), size = 1, prob = probs[x,]))
+# 
+# x_marg <- x_marg - 1
+# y_marg <- y_marg - 1
+
+
+bp <- expand.cells(matrix(c(rep(ancestors, N), rep(0, N)), ncol = 2), Time, b_1, d_1, b_2, d_2, mu)
 
 
 plot(ecdf(bp[,1]), pch = "")
-lines(0:(ncol(pdf)-1), cumsum(rowSums(pdf)), col = "red")
+lines(0:(nrow(probs)-1), cumsum(rowSums(probs)), pch = "", col = "red")
 
 plot(ecdf(bp[,2]), pch = "")
-lines(0:(nrow(pdf)-1), cumsum(colSums(pdf)), col = "red")
-
-
-# Test with means
-sum(pdf)
-x <- rowSums(pdf)
-sum(x * 0:(length(x)-1))
-exp((b_1 - d_1 - mu) * Time)
-
-y <- colSums(pdf)
-sum(y * 0:(length(y)-1))
-
-mu * (exp((b_2 - d_2) * Time) - exp((b_1 - d_1 -mu) * Time)) / ((b_2 - d_2) - (b_1 - d_1 - mu))
-
-
+lines(0:(ncol(probs)-1), cumsum(colSums(probs)), pch = "", col = "red")

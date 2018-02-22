@@ -22,7 +22,7 @@
 #' @return numeric matrix with (i,j) element representing P_{x,y}(x-1,j-1) since
 #'   (0,0) is included.
 #'   
-p2type <- function(t, alpha1, beta1, nu, alpha2, beta2, domain_size) {
-    .Call(`_sim2type_p2type`, t, alpha1, beta1, nu, alpha2, beta2, domain_size)
+p2type <- function(t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size) {
+    .Call(`_sim2type_p2type`, t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size)
 }
 
