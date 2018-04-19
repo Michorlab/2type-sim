@@ -6,11 +6,13 @@
 #include <cmath>
 #include <Rcpp.h>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "twotype_pgf.h"
 #include "complex_functions.H"
 #include "hyp_2F1.cpp"
-
-// To Run (in terminal): g++-7 -I/usr/local/include twotype_pgf.cpp -lfftw3 -lm -o pgf
 
 //' p2type
 //' 
@@ -36,8 +38,14 @@
 // [[Rcpp::export]]
 Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
                            double alpha2, double beta2, int ancestors,
-                           int domain_size)
+                           int domain_size, int threads = 0)
 {
+#ifdef _OPENMP
+  if ( threads > 0 )
+    omp_set_num_threads( threads );
+  REprintf("Number of threads=%i\n", omp_get_max_threads());
+#endif
+
 
   //double lambda1 = 1.0 - beta1 - nu; // Use this one for mutation w/o split
   double lambda1 = alpha1 - beta1; // Use this one for split and mutation
@@ -64,6 +72,7 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   std::complex<double> s1_exp;
   std::complex<double> s2_exp;
 
+  /*
   int l = 0;
   for(int j = 0; j < N; j++)
   {
@@ -77,7 +86,19 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
       //freq_dat[l] =  A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c);
       l += 1;
     }
-
+  }
+  */
+  
+  // Single Loop
+  #pragma omp parallel for 
+  for(int l = 0; l < (N*N - 1); l++)
+  {
+    //Rcpp::Rcout << omp_get_thread_num() << "\n";
+    int j = floor(l / N);
+    int k = l % N;
+    s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
+    s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
+    freq_dat[l] =  pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
   }
 
   Rcpp::Rcout << "Finished calculating PGF. Starting Fourier Transform.\n";
@@ -89,7 +110,7 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   Rcpp::Rcout << "Finished calculating Inverse Fourier Transform. Calculating Probabilities.\n";
 
   Rcpp::NumericMatrix probs(N,N);
-  l = 0;
+  int l = 0;
   for(int j = 0; j < N; j++)
   {
     for(int k = 0; k < N; k++)

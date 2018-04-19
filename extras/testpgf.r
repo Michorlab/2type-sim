@@ -33,18 +33,18 @@ expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
   return(cells)
 }
 
-
+library(sim2type)
 b_1 <- 2
 d_1 <- 0.1
 b_2 <- 1.0
 d_2 <- 0.4
 mu <- 0.01
 N <- 10000
-ancestors <- 3
+ancestors <- 1
 rho <- 0
 Time <- 2
 
-probs <- p2type(Time, b_1, d_1, mu, b_2, d_2, ancestors, 9)
+probs <- p2type(Time, b_1, d_1, mu, b_2, d_2, ancestors, 10)
 
 # Generate random numbers
 # N <- 3000
