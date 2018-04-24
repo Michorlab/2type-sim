@@ -1,5 +1,5 @@
 # The version set here will propagate to other files from here
-AC_INIT([2type-sim], 0.0.1)
+AC_INIT([bdm2type], 0.0.1)
 
 ## Determine Install Location of R
 : ${R_HOME=$(R RHOME)}
@@ -39,6 +39,5 @@ if test "${ac_pkg_openmp}" = no; then
   AC_MSG_WARN([No OpenMP support. If using GCC, upgrade to >= 4.2. If using clang, upgrade to >= 3.8.0])
 fi
 
-sh ./extras/setup.sh
 
 AC_OUTPUT([src/Makevars])

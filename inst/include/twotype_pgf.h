@@ -1,7 +1,11 @@
 #define _USE_MATH_DEFINES
+#define SIGN(a) (((a) < 0) ? (-1) : (1))
+#define finite(a) (isfinite(a))
+using namespace std;
 #include<complex>
 #include <fftw3.h>
-#include "hyp2F1.h"
+#include "complex_functions.H"
+#include "hyp_2F1.cpp"
 
 std::complex<double> F1(double a, double b, double c, std::complex<double> z);
 std::complex<double> F2(double a, double b, double c, std::complex<double> z);

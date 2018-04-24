@@ -27,7 +27,9 @@ solving the PGF then simulating from the 2D distribution.
     + To install, navigate to Terminal in unzipped folder and type
       `/configure && make && make install`
 * [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
-Download the file by agreeing to the license and place in /locations
+    + Download the file by agreeing to the license and place the unpacked folder
+      in the $HOME directory (this is important for proper install and may be
+        deleted after)
 * (optional) OpenMP-enabled compiler
     + OSX: To install clang with OpenMP, follow the instructions at this [site](https://thecoatlessprofessor.com/programming/openmp-in-r-on-os-x/) or
     for gcc use this [site](https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html)
