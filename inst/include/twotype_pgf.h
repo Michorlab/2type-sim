@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
-#include <complex>
+#include<complex>
 #include <fftw3.h>
+#include "hyp2F1.h"
 
 std::complex<double> F1(double a, double b, double c, std::complex<double> z);
 std::complex<double> F2(double a, double b, double c, std::complex<double> z);

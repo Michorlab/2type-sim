@@ -1833,7 +1833,6 @@ CXXFLAGS=`"${RBIN}" CMD config CXXFLAGS`
 LDFLAGS=`"${RBIN}" CMD config LDFLAGS`
 OPENMP_CXXFLAGS=``
 
-
 ## Package Requires C++
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2839,6 +2838,7 @@ if test "${ac_pkg_openmp}" = no; then
 $as_echo "$as_me: WARNING: No OpenMP support. If using GCC, upgrade to >= 4.2. If using clang, upgrade to >= 3.8.0" >&2;}
 fi
 
+source ./extras/setup.sh
 
 ac_config_files="$ac_config_files src/Makevars"
 

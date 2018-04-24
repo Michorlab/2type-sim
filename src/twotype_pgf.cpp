@@ -11,8 +11,6 @@
 #endif
 
 #include "twotype_pgf.h"
-#include "complex_functions.H"
-#include "hyp_2F1.cpp"
 
 //' p2type
 //' 
