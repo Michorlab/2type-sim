@@ -2839,8 +2839,6 @@ $as_echo "$as_me: WARNING: No OpenMP support. If using GCC, upgrade to >= 4.2. I
 fi
 
 
-
-
 ac_config_files="$ac_config_files src/Makevars"
 
 cat >confcache <<\_ACEOF
