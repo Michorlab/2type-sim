@@ -23,6 +23,6 @@
 #'   (0,0) is included.
 #'   
 p2type <- function(t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads = 0L) {
-    .Call(`_bdm2type_p2type`, t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads)
+    .Call(`_bdmsim_p2type`, t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads)
 }
 

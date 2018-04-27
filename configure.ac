@@ -1,5 +1,5 @@
 # The version set here will propagate to other files from here
-AC_INIT([bdm2type], 0.0.1)
+AC_INIT([bdmsim], 0.0.1)
 
 ## Determine Install Location of R
 : ${R_HOME=$(R RHOME)}

@@ -66,12 +66,9 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   double R = 0.99745;
 
   std::complex<double>* freq_dat = new std::complex<double>[N*N];
-
-  std::complex<double> s1_exp;
-  std::complex<double> s2_exp;
-
-  /*
+  
   int l = 0;
+  /*
   for(int j = 0; j < N; j++)
   {
     s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
@@ -79,36 +76,34 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
     for(int k = 0; k < N; k++)
     {
       s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
-
-      freq_dat[l] =  pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
-      //freq_dat[l] =  A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c);
+      //freq_dat[l] =  pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
+      freq_dat[l] =  A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c);
       l += 1;
     }
   }
   */
-  
   // Single Loop
   #pragma omp parallel for 
-  for(int l = 0; l < (N*N - 1); l++)
+  for(int l = 0; l < (N*N); l++)
   {
-    //Rcpp::Rcout << omp_get_thread_num() << "\n";
     int j = floor(l / N);
     int k = l % N;
-    s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
-    s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
-    freq_dat[l] =  pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
+    std::complex<double> s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
+    std::complex<double> s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
+    std::complex<double> num_sol = pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
+    freq_dat[l] =  num_sol;
   }
 
   Rcpp::Rcout << "Finished calculating PGF. Starting Fourier Transform.\n";
 
   fftw_plan plan;
   plan = fftw_plan_dft_2d(N, N, reinterpret_cast<fftw_complex*>(&freq_dat[0]), reinterpret_cast<fftw_complex*>(&freq_dat[0]), FFTW_FORWARD, FFTW_ESTIMATE);
-  fftw_execute(plan); /* repeat as needed */
+  fftw_execute(plan);
 
   Rcpp::Rcout << "Finished calculating Inverse Fourier Transform. Calculating Probabilities.\n";
 
   Rcpp::NumericMatrix probs(N,N);
-  int l = 0;
+  l = 0;
   for(int j = 0; j < N; j++)
   {
     for(int k = 0; k < N; k++)

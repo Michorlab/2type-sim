@@ -1,6 +1,6 @@
-\name{bdm2type-package}
-\alias{bdm2type-package}
-\alias{bdm2type}
+\name{bdmsim-package}
+\alias{bdmsim-package}
+\alias{bdmsim}
 \docType{package}
 \title{
   A short title line describing what the package does

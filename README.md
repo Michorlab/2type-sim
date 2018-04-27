@@ -1,5 +1,5 @@
 ---
-title: "bdm2type: Fast simulations from a 2-type birth-death-mutation process"
+title: "bdmsim: Fast simulations from a 2-type birth-death-mutation process"
 author: "Thomas McDonald and Franziska Michor"
 output: pdf_document
 # output: github_document
@@ -15,9 +15,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# bdm2type
+# bdmsim
 
-bdm2type is a package to generate the distribution for a 2-type
+bdmsim is a package to generate the distribution for a 2-type
 birth-death-mutation process with irreversible mutations by numerically
 solving the PGF then simulating from the 2D distribution.
 
@@ -35,3 +35,17 @@ solving the PGF then simulating from the 2D distribution.
     for gcc use this [site](https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html)
     + Linux:
     + Windows:
+* devtools (R package)
+
+# Installation
+To install, run the following in R
+```{r, eval = F}
+install.packages("devtools")
+devtools::install_git("git://github.com/Michorlab/bdmsim.git")
+```
+
+After installation, the CPP files for the hypergeometric functions can be deleted from your HOME path.
+
+# Uses
+
+# Using bdmsim

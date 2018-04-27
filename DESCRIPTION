@@ -1,13 +1,14 @@
-Package: bdm2type
+Package: bdmsim
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Birth-Death-Mutation simulation using the probability generating function.
 Version: 0.1
 Date: 2018-02-15
-Author: Your Name
-Maintainer: Thomas McDonald <mcdonald@jimmy.harvard.edu>
-Description: One paragraph description of what the package does as one or
-        more full sentences.
-License: GPL (>= 2)
+Author: Thomas O McDonald and Franziska Michor
+Maintainer: Thomas O McDonald <mcdonald@jimmy.harvard.edu>
+Description: bdmsim simulates 2-type birth-death-mutation processes for use in sensitive/resistant or primary/metastases models
+License: GPL-3
 Imports: Rcpp (>= 0.12.14)
 LinkingTo: Rcpp
 NeedsCompilation: yes
+URL: https://github.com/Michorlab/bdmsim
+BugReports: https://github.com/Michorlab/bdmsim/issues

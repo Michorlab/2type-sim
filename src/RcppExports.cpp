@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // p2type
 Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int domain_size, int threads);
-RcppExport SEXP _bdm2type_p2type(SEXP tSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP domain_sizeSEXP, SEXP threadsSEXP) {
+RcppExport SEXP _bdmsim_p2type(SEXP tSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP domain_sizeSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,11 +26,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_bdm2type_p2type", (DL_FUNC) &_bdm2type_p2type, 9},
+    {"_bdmsim_p2type", (DL_FUNC) &_bdmsim_p2type, 9},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_bdm2type(DllInfo *dll) {
+RcppExport void R_init_bdmsim(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -33,7 +33,7 @@ expand.cells <- function(cells, passage_time, b_s, d_s, b_r, d_r, mu)
   return(cells)
 }
 
-library(bdm2type)
+library(bdmsim)
 b_1 <- 2
 d_1 <- 0.1
 b_2 <- 1.0
