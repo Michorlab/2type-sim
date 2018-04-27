@@ -1,7 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <random>
 #include <cmath>
 #include <Rcpp.h>
 
