@@ -1,3 +1,2 @@
-OPENMP_CXXFLAGS = @OPENMP_CXXFLAGS@
-PKG_CPPFLAGS=-I/usr/local/include -I../inst/include -I$(HYPERG_PATH) $(OPENMP_CXXFLAGS)
+PKG_CPPFLAGS=-I/usr/local/include -I../inst/include -I$(HYPERG_PATH)
 PKG_LIBS = -lfftw3 -lm
