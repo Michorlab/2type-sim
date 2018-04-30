@@ -36,13 +36,14 @@ configuration and is provided below.
     ~~~~
     + If installing locally (ex. to /my/local/folder), navigate to the unzipped folder and type
     ~~~~
-    ./configure --previx=/my/local/folder
+    ./configure --prefix=/my/local/folder
     make
     make install
     ~~~~
-    the edit .R/Makevars to contain the following:
+    the edit ~/.R/Makevars to contain the following:
     ~~~
-    LDFLAGS=-L/my/local/folder
+    LDFLAGS:=$(LDFLAGS) -L/my/local/folder
+    CXXFLAGS:=$(CSSFLAGS) -I/my/local/folder/include
     ~~~
 * [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
     + Download the file by agreeing to the license
