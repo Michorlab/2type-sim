@@ -6,21 +6,21 @@
 using namespace Rcpp;
 
 // p2type
-Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int domain_size, int threads);
-RcppExport SEXP _bdmsim_p2type(SEXP tSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP domain_sizeSEXP, SEXP threadsSEXP) {
+Rcpp::NumericMatrix p2type(double t, int dom, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int threads);
+RcppExport SEXP _bdmsim_p2type(SEXP tSEXP, SEXP domSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< int >::type dom(domSEXP);
     Rcpp::traits::input_parameter< double >::type alpha1(alpha1SEXP);
     Rcpp::traits::input_parameter< double >::type beta1(beta1SEXP);
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
     Rcpp::traits::input_parameter< double >::type alpha2(alpha2SEXP);
     Rcpp::traits::input_parameter< double >::type beta2(beta2SEXP);
     Rcpp::traits::input_parameter< int >::type ancestors(ancestorsSEXP);
-    Rcpp::traits::input_parameter< int >::type domain_size(domain_sizeSEXP);
     Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(p2type(t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads));
+    rcpp_result_gen = Rcpp::wrap(p2type(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads));
     return rcpp_result_gen;
 END_RCPP
 }

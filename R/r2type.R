@@ -1,16 +1,16 @@
 # Moment functions
-m1 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
+.m1 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
 {
   ancestors * exp((alpha1 - beta1) * t)
 }
 
-m2 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
+.m2 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
 {
   ancestors * nu * (exp((alpha1 - beta1) * t) - exp((alpha2 - beta2) * t)) /
     ((alpha1 - beta1) - (alpha2 - beta2))
 }
 
-var1 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
+.var1 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
 {
   (1 / (alpha1 - alpha2 - beta1 + beta2) *
     (
@@ -20,7 +20,7 @@ var1 <- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
     )) * ancestors^2
 }
 
-var2<- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
+.var2<- function(t, ancestors, alpha1, beta1, nu, alpha2, beta2)
 {
   (
     (
@@ -72,12 +72,13 @@ r2type <- function(N, pdf, ancestors = 1)
 #' 
 #' @param t time to simulate
 #' @param N number of samples to generate
-#' @param ancestors pdf matrix generated from p2type
-#' @param alpha1
-#' @param beta1
-#' @param nu
-#' @param alpha2
-#' @param beta2
+#' @param alpha1 type 1 split rate
+#' @param beta1 type 1 death rate
+#' @param nu type 1 mutation rate (Note: not a probability!)
+#' @param alpha2 type 2 split rate
+#' @param beta2 type 2 death rate
+#' @param ancestors number of ancestors
+
 
 #' @return matrix of randomly generated 2-dimensional values
 #' 
@@ -94,7 +95,9 @@ rbdm <- function(t, N, alpha1, beta1, nu, alpha2, beta2, ancestors = 1)
   # up to 2^11 or 2^12 maximum at a time
   
   # Generate distribution function
-  pdf = p2type(t, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, domain_size = 10)
+  # NOTE: make domain_size adaptive based on mean and variance
+  pdf = p2type(t, domain_size = 100, alpha1, beta1, nu, alpha2, beta2, 1)
   # return simulated values
-  r2type(N, pdf, 1)
+  # NOTE: create class/list to return including mean, etc.
+  r2type(N, pdf, ancestors)
 }

@@ -16,22 +16,22 @@
 //' split with rate alpha2 and die with rate beta2.
 //' 
 //' @param t time to run process
+//' @param dom Size of domain of pdf to calculate. p2type calculates
+//'   values of P_{i,j}(x,y) for x,y = {0, 1, ..., dom - 1}. Larger
+//'   time requires higher values of dom, but slows down computation
+//'   since a dom x dom matrix is created.
 //' @param alpha1 type 1 split rate
 //' @param beta1 type 1 death rate
 //' @param nu type 1 mutation rate (Note: not a probability!)
 //' @param alpha2 type 2 split rate
 //' @param beta2 type 2 death rate
-//' @param domain_size Size of domain of pdf to calculate. p2type calculates
-//'   values of P_{i,j}(x,y) for x,y = {0, 1, ..., 2^domain_size - 1}. Larger
-//'   time requires higher values of N, but slows down computation since a
-//'   2^N x 2^N matrix is created.
 //' @return numeric matrix with (i,j) element representing P_{x,y}(x-1,j-1) since
 //'   (0,0) is included.
 //'   
 // [[Rcpp::export]]
-Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
-                           double alpha2, double beta2, int ancestors,
-                           int domain_size, int threads = 0)
+Rcpp::NumericMatrix p2type(double t, int dom, double alpha1, double beta1,
+                           double nu, double alpha2, double beta2,
+                           int ancestors = 1, int threads = 0)
 {
 #ifdef _OPENMP
   if ( threads > 0 )
@@ -57,20 +57,19 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   double b = (omega + lambda1) / lambda2;
   double c = (1.0 + a + b - nu / alpha2);
 
-  int N = pow(2, domain_size);
   double R = 0.99745;
 
-  std::complex<double>* freq_dat = new std::complex<double>[N*N];
+  std::complex<double>* freq_dat = new std::complex<double>[dom*dom];
   
   int l = 0;
   /*
-  for(int j = 0; j < N; j++)
+  for(int j = 0; j < dom; j++)
   {
-    s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
+    s1_exp = R * exp(std::complex<double>(2 * M_PI * j / dom,0) * std::complex<double>(0,1));
 
-    for(int k = 0; k < N; k++)
+    for(int k = 0; k < dom; k++)
     {
-      s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
+      s2_exp = R * exp(std::complex<double>(2 * M_PI * k / dom,0) * std::complex<double>(0,1));
       //freq_dat[l] =  pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
       freq_dat[l] =  A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c);
       l += 1;
@@ -79,12 +78,12 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   */
   // Single Loop
   #pragma omp parallel for 
-  for(int l = 0; l < (N*N); l++)
+  for(int l = 0; l < (dom*dom); l++)
   {
-    int j = floor(l / N);
-    int k = l % N;
-    std::complex<double> s1_exp = R * exp(std::complex<double>(2 * M_PI * j / N,0) * std::complex<double>(0,1));
-    std::complex<double> s2_exp = R * exp(std::complex<double>(2 * M_PI * k / N,0) * std::complex<double>(0,1));
+    int j = floor(l / dom);
+    int k = l % dom;
+    std::complex<double> s1_exp = R * exp(std::complex<double>(2 * M_PI * j / dom,0) * std::complex<double>(0,1));
+    std::complex<double> s2_exp = R * exp(std::complex<double>(2 * M_PI * k / dom,0) * std::complex<double>(0,1));
     std::complex<double> num_sol = pow(A_gf(s1_exp, s2_exp, t, alpha1, alpha2, lambda2, omega, a, b, c), ancestors);
     freq_dat[l] =  num_sol;
   }
@@ -92,18 +91,18 @@ Rcpp::NumericMatrix p2type(double t, double alpha1, double beta1, double nu,
   Rcpp::Rcout << "Finished calculating PGF. Starting Fourier Transform.\n";
 
   fftw_plan plan;
-  plan = fftw_plan_dft_2d(N, N, reinterpret_cast<fftw_complex*>(&freq_dat[0]), reinterpret_cast<fftw_complex*>(&freq_dat[0]), FFTW_FORWARD, FFTW_ESTIMATE);
+  plan = fftw_plan_dft_2d(dom, dom, reinterpret_cast<fftw_complex*>(&freq_dat[0]), reinterpret_cast<fftw_complex*>(&freq_dat[0]), FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(plan);
 
   Rcpp::Rcout << "Finished calculating Inverse Fourier Transform. Calculating Probabilities.\n";
 
-  Rcpp::NumericMatrix probs(N,N);
+  Rcpp::NumericMatrix probs(dom,dom);
   l = 0;
-  for(int j = 0; j < N; j++)
+  for(int j = 0; j < dom; j++)
   {
-    for(int k = 0; k < N; k++)
+    for(int k = 0; k < dom; k++)
     {
-      probs(j, k) = real(freq_dat[l] * pow(R, -k-j) / pow(N,2));
+      probs(j, k) = real(freq_dat[l] * pow(R, -k-j) / pow(dom,2));
       l+=1;
     }
   }

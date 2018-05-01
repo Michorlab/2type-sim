@@ -10,19 +10,19 @@
 #' split with rate alpha2 and die with rate beta2.
 #' 
 #' @param t time to run process
+#' @param dom Size of domain of pdf to calculate. p2type calculates
+#'   values of P_{i,j}(x,y) for x,y = {0, 1, ..., dom - 1}. Larger
+#'   time requires higher values of dom, but slows down computation
+#'   since a dom x dom matrix is created.
 #' @param alpha1 type 1 split rate
 #' @param beta1 type 1 death rate
 #' @param nu type 1 mutation rate (Note: not a probability!)
 #' @param alpha2 type 2 split rate
 #' @param beta2 type 2 death rate
-#' @param domain_size Size of domain of pdf to calculate. p2type calculates
-#'   values of P_{i,j}(x,y) for x,y = {0, 1, ..., 2^domain_size - 1}. Larger
-#'   time requires higher values of N, but slows down computation since a
-#'   2^N x 2^N matrix is created.
 #' @return numeric matrix with (i,j) element representing P_{x,y}(x-1,j-1) since
 #'   (0,0) is included.
 #'   
-p2type <- function(t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads = 0L) {
-    .Call(`_bdmsim_p2type`, t, alpha1, beta1, nu, alpha2, beta2, ancestors, domain_size, threads)
+p2type <- function(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1L, threads = 0L) {
+    .Call(`_bdmsim_p2type`, t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads)
 }
 
