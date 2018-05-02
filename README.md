@@ -43,7 +43,7 @@ configuration and is provided below.
     then edit ~/.R/Makevars to contain the following:
     ~~~
     LDFLAGS:=$(LDFLAGS) -L/my/local/folder
-    CXXFLAGS:=$(CSSFLAGS) -I/my/local/folder/include
+    CXXFLAGS:=$(CXXFLAGS) -I/my/local/folder/include
     ~~~
 * [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
     + Download the file by agreeing to the license
@@ -106,5 +106,3 @@ dom too low can be inaccurate and dom too high can take a lot of time. In cases 
 supercritical growth, or there is a high probability for large `dom` values, other methods such as simulation
 with the Gillespie algorithm may be preferable.
 * Setting too many threads from OpenMP can cause slowdowns as well.
-
-
