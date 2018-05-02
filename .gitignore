@@ -8,3 +8,4 @@
 *.so
 config.log
 config.status
+*.dll
