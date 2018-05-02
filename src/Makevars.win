@@ -1,2 +1,2 @@
 PKG_CPPFLAGS=-I/usr/local/include -I../inst/include -I$(HYPERG_PATH) -I$(LIB_FFTW)/include
-PKG_LIBS = -L$(LIB_FFTW) -lfftw3 -lm
+PKG_LIBS = -L$(LIB_FFTW)/lib -lfftw3 -lm
