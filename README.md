@@ -48,8 +48,8 @@ configuration and is provided below.
 * [fftw](http://www.fftw.org/install/windows.html) (Windows)
     + Use the provided precompiled files by download and unpack the Zip files for the proper version of fftw3.
     + Create the Environmental variable LIB_FFTW with the location of the unpacked folder and append the folder location to the Path Environmental variable.
-        + Right-click on "My Computer>Properties". Click "Advanced System Settings". Click the "Environment Variables" button under the "Advanced" tab. Under "System Variables" click "New" and type "LIB_FFTW" in the Variable Name and the path in quotation marks in the Variable value (i.e. "C:\Path\to\fftw3").
-    + Edit the Path Environmental variable by appending the unzipped folder path to the end of it. Separate the previous path from the new on with a semicolon.
+        + Right-click on "My Computer>Properties". Click "Advanced System Settings". Click the "Environment Variables" button under the "Advanced" tab. Under "System Variables" click "New" and type "LIB_FFTW" in the Variable Name and the path in quotation marks in the Variable value (i.e. "C:/Path/to/fftw3").
+    + Edit the Path Environmental variable by appending the unzipped folder path to the end of it. Separate the previous path from the new on with a semicolon (Note: file paths need forward slashes here).
 * [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
     + Download the file by agreeing to the license
     + Edit `~/.Renviron` so the R environmental variable `HYPERG_PATH` is given the location of the downloaded folder as follows:
