@@ -11,6 +11,8 @@ std::complex<double> F1(double a, double b, double c, std::complex<double> z);
 std::complex<double> F2(double a, double b, double c, std::complex<double> z);
 std::complex<double> F3(double a, double b, double c, std::complex<double> z);
 std::complex<double> F4(double a, double b, double c, std::complex<double> z);
+std::complex<double> F2_2(double a, double b, double c, std::complex<double> z);
+std::complex<double> F4_2(double a, double b, double c, std::complex<double> z);
 
 double z(double y, double t, double alpha2, double lambda2);
 std::complex<double> z(std::complex<double> y, double t, double alpha2, double lambda2);
@@ -23,6 +25,8 @@ std::complex<double> kappa(std::complex<double> x, std::complex<double> y, doubl
 
 //double C1(double x, double y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
 std::complex<double> C1(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);
+std::complex<double> C1_2(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);
 
 //double A_gf(double x, double y, double t, double alpha2, double lambda2, double omega, double a, double b, double c);
 std::complex<double> A_gf(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);
+std::complex<double> A_gf_2(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double lambda2, double omega, double a, double b, double c);

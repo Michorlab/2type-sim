@@ -78,12 +78,13 @@ r2type <- function(N, pdf, ancestors = 1)
 #' @param alpha2 type 2 split rate
 #' @param beta2 type 2 death rate
 #' @param ancestors number of ancestors
+#' @param model which model to simulate (1 = mutation without split, 2 = mutation with split)
 
 
 #' @return matrix of randomly generated 2-dimensional values
 #' 
 #' @export
-rbdm <- function(t, N, alpha1, beta1, nu, alpha2, beta2, ancestors = 1)
+rbdm <- function(t, N, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, model = 2)
 {
   # Determine expectation and variances
   mean = c(m1(t, ancestors, alpha1, beta1, nu, alpha2, beta2),
@@ -96,7 +97,7 @@ rbdm <- function(t, N, alpha1, beta1, nu, alpha2, beta2, ancestors = 1)
   
   # Generate distribution function
   # NOTE: make domain_size adaptive based on mean and variance
-  pdf = p2type(t, domain_size = 100, alpha1, beta1, nu, alpha2, beta2, 1)
+  pdf = p2type2(t, domain_size = 100, alpha1, beta1, nu, alpha2, beta2, 1)
   # return simulated values
   # NOTE: create class/list to return including mean, etc.
   r2type(N, pdf, ancestors)

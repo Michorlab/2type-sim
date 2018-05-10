@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// p2type
-Rcpp::NumericMatrix p2type(double t, int dom, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int threads);
-RcppExport SEXP _bdmsim_p2type(SEXP tSEXP, SEXP domSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP threadsSEXP) {
+// p2type2
+Rcpp::NumericMatrix p2type2(double t, int dom, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int threads);
+RcppExport SEXP _bdmsim_p2type2(SEXP tSEXP, SEXP domSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,13 +20,33 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type beta2(beta2SEXP);
     Rcpp::traits::input_parameter< int >::type ancestors(ancestorsSEXP);
     Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(p2type(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads));
+    rcpp_result_gen = Rcpp::wrap(p2type2(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// p2type1
+Rcpp::NumericMatrix p2type1(double t, int dom, double alpha1, double beta1, double nu, double alpha2, double beta2, int ancestors, int threads);
+RcppExport SEXP _bdmsim_p2type1(SEXP tSEXP, SEXP domSEXP, SEXP alpha1SEXP, SEXP beta1SEXP, SEXP nuSEXP, SEXP alpha2SEXP, SEXP beta2SEXP, SEXP ancestorsSEXP, SEXP threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< int >::type dom(domSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha1(alpha1SEXP);
+    Rcpp::traits::input_parameter< double >::type beta1(beta1SEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha2(alpha2SEXP);
+    Rcpp::traits::input_parameter< double >::type beta2(beta2SEXP);
+    Rcpp::traits::input_parameter< int >::type ancestors(ancestorsSEXP);
+    Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(p2type1(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_bdmsim_p2type", (DL_FUNC) &_bdmsim_p2type, 9},
+    {"_bdmsim_p2type2", (DL_FUNC) &_bdmsim_p2type2, 9},
+    {"_bdmsim_p2type1", (DL_FUNC) &_bdmsim_p2type1, 9},
     {NULL, NULL, 0}
 };
 
