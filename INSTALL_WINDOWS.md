@@ -106,18 +106,29 @@ make
 make install
 ~~~
 
-------------------------------------
+
 
 
 ## Unpack FFTW3 DLLs
 Unpack the file to a permanent location on disk (i.e. C:/msys/1.0/local/fftw3).
-* Create the Environmental variable LIB_FFTW with the location of the unpacked folder and append the folder location to the Path Environmental variable.
-    + Right-click on "My Computer>Properties". Click "Advanced System Settings". Click the "Environment Variables" button under the "Advanced" tab. Under "System Variables" click "New" and type "LIB_FFTW" in the Variable Name and the path in quotation marks in the Variable value (i.e. "C:/Path/to/fftw3")
-    OR
-    + Edit the Path Environmental variable by appending the unzipped folder's path to the end of it. Separate the previous path from the new on with a semicolon (Note: file paths need forward slashes here).
+* Option 1 (single user): Modify the .Renviron file in your R__HOME directory (most likely under My Documents) to include the line
+~~~
+LIB_FFTW="C:/your/path/to/fftw"
+~~~
+* Option 2 (multiple users) Create the Environmental variable LIB_FFTW with the location of the unpacked folder and append the folder location to the Path Environmental variable.
+    + Right-click on "My Computer>Properties". Click "Advanced System Settings". Click the "Environment Variables" button under the "Advanced" tab. Under "System Variables" click "New" and type "LIB_FFTW" in the Variable Name and the path in quotation marks in the Variable value (i.e. "C:/path/to/fftw3")
 
 ## Install the [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
-Download the file by agreeing to the license. Unpack the files to a permanent location (i.e. C:/msys/1.0/local/AEAE). Create the Environmental variable HYPERG_PATH with the location of the unpacked folder.
+Download the file by agreeing to the license. Unpack the files to a permanent location (i.e. C:/msys/1.0/local/AEAE). Add the following line to your .Renviron file
+~~~
+LIB_FFTW="C:/your/path/to/AEAE"
+~~~
+or create a new environmental variable HYPERG_PATH with the location of the unpacked folder.
 
 
-## Updating Environment Variables (HYPERG_PATH, LIB_FFTW, PATH)
+## Updating PATH Variables
+To allow R to run bdmsim at startup, add the locations of your /local/bin and /path/to/fftw3 folders to the end of your PATH variable, found same way as above. Using the above example, we would add:
+~~~
+C:/msys/1.0/local/bin;C:/msys/1.0/local/fftw-3.3.5
+~~~
+Additionally, 
