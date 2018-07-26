@@ -1,8 +1,8 @@
 ---
 title: "bdmsim: Fast simulations from a 2-type birth-death-mutation process"
-author: "Thomas McDonald and Franziska Michor"
-output: pdf_document
-# output: github_document
+author: "Thomas McDonald"
+# output: pdf_document
+output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -25,7 +25,8 @@ solving the PGF then simulating from the 2D distribution.
 
 Requirements are different for personal computers and servers which may have
 different permissions. The ability to install libraries locally requires more
-configuration and is provided below.
+configuration and is provided below. A guide for installing on a Windows
+computer is provided in the file INSTALL_WINDOWS.md.
 
 * [fftw](http://fftw.org/fftw-3.3.7.tar.gz) (OSX/Linux)
     + To install with Terminal, navigate to the unzipped folder and type
@@ -45,11 +46,12 @@ configuration and is provided below.
     LDFLAGS:=$(LDFLAGS) -L/my/local/folder
     CXXFLAGS:=$(CXXFLAGS) -I/my/local/folder/include
     ~~~
-* [fftw](http://www.fftw.org/install/windows.html) (Windows)
-    + Use the provided precompiled files by download and unpack the Zip files for the proper version of fftw3.
-    + Create the Environmental variable LIB_FFTW with the location of the unpacked folder and append the folder location to the Path Environmental variable.
-        + Right-click on "My Computer>Properties". Click "Advanced System Settings". Click the "Environment Variables" button under the "Advanced" tab. Under "System Variables" click "New" and type "LIB_FFTW" in the Variable Name and the path in quotation marks in the Variable value (i.e. "C:/Path/to/fftw3").
-    + Edit the Path Environmental variable by appending the unzipped folder path to the end of it. Separate the previous path from the new on with a semicolon (Note: file paths need forward slashes here).
+* [Arb](http://arblib.org) and it's dependencies [GMP](https://gmplib.org), [MPFR](http://www.mpfr.org), and [FLINT](http://www.flintlib.org/). Note: Some dependencies can be installed with Homebrew.
+    + For installation, follow directions on the [webpage](http://arblib.org/setup.html#download).
+    + If installation is with a non-administrator account, be sure to use the options for `configure` to designate install locations. Additionally, edit the environmental variable LD_LIBRARY_PATH by adding the following line to your .bash_profile.
+    ~~~
+    export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):/path/to/dependencies/lib
+    ~~~
 * [Hypergeometric Function Library](http://cpc.cs.qub.ac.uk/summaries/AEAE_v1_0.html)
     + Download the file by agreeing to the license
     + Edit `~/.Renviron` so the R environmental variable `HYPERG_PATH` is given the location of the downloaded folder as follows:
@@ -71,7 +73,7 @@ configuration and is provided below.
     SHLIB_CXXLD=/location/of/c++-compiler
     ~~~
 * devtools (R package)
-    + Install in R through CRAN with `install.packages("devtools")
+    + Install in R through CRAN with `install.packages("devtools")`
 
 
 # Installation
