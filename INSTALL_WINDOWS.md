@@ -131,4 +131,9 @@ To allow R to run bdmsim at startup, add the locations of your /local/bin and /p
 ~~~
 C:/msys/1.0/local/bin;C:/msys/1.0/local/fftw-3.3.5
 ~~~
-Additionally, 
+
+## Install bdmsim
+Install bdmsim by typing in the R console:
+~~~
+install_git("git://github.com/Michorlab/bdmsim", args="--no-multiarch")
+~~~
