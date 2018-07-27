@@ -1,3 +1,3 @@
-PKG_CPPFLAGS=-I/usr/local/include -I../inst/include -I$(HYPERG_PATH) -I$(LIB_FFTW) -I$(LIB_ARB)/include
-PKG_LIBS = -L$(LIB_FFTW) -L$(LIB_ARB)/lib -lfftw3-3 -lm -larb -lflint -lmpfr -lgmp
+PKG_CPPFLAGS=-I/usr/local/include -I../inst/include -I$(HYPERG_PATH) -I$(LIB_FFTW) -I$(LIB_ARB)/include $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS = -L$(LIB_FFTW) -L$(LIB_ARB)/lib -lfftw3-3 -lm -larb -lflint -lmpfr -lgmp $(SHLIB_OPENMP_CXXFLAGS)
 CXX_STD=CXX11
