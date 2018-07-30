@@ -1,5 +1,5 @@
 ---
-title: "bdmsim: Fast simulations from a 2-type birth-death-mutation process"
+title: "BIRDMAN: Fast simulations from a 2-type birth-death-mutation process"
 author: "Thomas McDonald"
 # output: pdf_document
 output: github_document
@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 )
 ~~~
 
-# bdmsim
+# BIRDMAN
 
-bdmsim is a package to generate the distribution for a 2-type
+BIRDMAN is a package to generate the distribution for a 2-type
 birth-death-mutation process with irreversible mutations by numerically
 solving the PGF then simulating from the 2D distribution.
 
@@ -27,7 +27,7 @@ solving the PGF then simulating from the 2D distribution.
 Requirements are different for personal computers and servers which may have
 different permissions. The ability to install libraries locally requires more
 configuration and is provided below. A guide for installing on a Windows
-computer is provided in the file [INSTALL_WINDOWS.md](https://github.com/Michorlab/bdmsim/blob/master/INSTALL_WINDOWS.md).
+computer is provided in the file [INSTALL_WINDOWS.md](https://github.com/Michorlab/BIRDMAN/blob/master/INSTALL_WINDOWS.md).
 
 ## Normal Installation of Dependencies with Root Permissions
 * [fftw](http://fftw.org/fftw-3.3.7.tar.gz) (OSX/Linux)
@@ -102,13 +102,13 @@ LIB_FFTW=/my/local/folder
 To install, run the following in R
 ~~~
 install.packages("devtools")
-devtools::install_git("git://github.com/Michorlab/bdmsim.git")
+devtools::install_git("git://github.com/Michorlab/BIRDMAN.git")
 ~~~
 
 
 # Uses
 
-bdmsim provides functions to numerically calculate the probability generating function and mass function for
+BIRDMAN provides functions to numerically calculate the probability generating function and mass function for
 the two-type birth-death-mutation process. Individuals of type 1 may split, die, or split into one type 1 and
 one type 2 with rates $\alpha_1$, $\beta_1$, $\nu$ respectively. Type 2 individuals may split or die with
 rates $\alpha_2$ and $\beta_2$.

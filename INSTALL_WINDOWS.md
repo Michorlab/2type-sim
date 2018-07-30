@@ -1,5 +1,5 @@
 ---
-title: "bdmsim: Windows installation"
+title: "BIRDMAN: Windows installation"
 author: "Thomas McDonald"
 # output: pdf_document
 output: github_document
@@ -127,13 +127,13 @@ or create a new environmental variable HYPERG_PATH with the location of the unpa
 
 
 ## Updating PATH Variables
-To allow R to run bdmsim at startup, add the locations of your /local/bin and /path/to/fftw3 folders to the end of your PATH variable, found same way as above. Using the above example, we would add:
+To allow R to run BIRDMAN at startup, add the locations of your /local/bin and /path/to/fftw3 folders to the end of your PATH variable, found same way as above. Using the above example, we would add:
 ~~~
 C:/msys/1.0/local/bin;C:/msys/1.0/local/fftw-3.3.5
 ~~~
 
-## Install bdmsim
-Install bdmsim by typing in the R console:
+## Install BIRDMAN
+Install BIRDMAN by typing in the R console:
 ~~~
-install_git("git://github.com/Michorlab/bdmsim", args="--no-multiarch")
+install_git("git://github.com/Michorlab/BIRDMAN", args="--no-multiarch")
 ~~~

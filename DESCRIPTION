@@ -1,14 +1,15 @@
-Package: bdmsim
+Package: BIRDMAN
 Type: Package
-Title: Birth-Death-Mutation simulation using the probability generating function.
-Version: 0.1
+Title: BIRth-Death-Mutation Algorithm for Numerical solutions
+Version: 1.0.0
 Date: 2018-02-15
-Author: Thomas O McDonald and Franziska Michor
+Authors@R: person("Thomas O", "McDonald", email = "mcdonald@jimmy.harvard.edu", role = c("aut", "cre"))
 Maintainer: Thomas O McDonald <mcdonald@jimmy.harvard.edu>
-Description: bdmsim simulates 2-type birth-death-mutation processes for use in sensitive/resistant or primary/metastases models
+Description: BIRDMAN numerically calculates the probability mass function for 2-type birth-death-mutation processes for use in sensitive/resistant or primary/metastases models.
 License: GPL-3
 Imports: Rcpp (>= 0.12.14)
 LinkingTo: Rcpp
 NeedsCompilation: yes
-URL: https://github.com/Michorlab/bdmsim
-BugReports: https://github.com/Michorlab/bdmsim/issues
+URL: https://github.com/Michorlab/BIRDMAN
+BugReports: https://github.com/Michorlab/BIRDMAN/issues
+RoxygenNote: 6.0.1

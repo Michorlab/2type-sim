@@ -1,3 +1,3 @@
-useDynLib(bdmsim, .registration=TRUE)
+useDynLib(BIRDMAN, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)

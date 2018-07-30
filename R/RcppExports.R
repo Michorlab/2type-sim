@@ -23,7 +23,7 @@
 #'   (0,0) is included.
 #'
 p2type1 <- function(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1L, threads = 1L) {
-    .Call(`_bdmsim_p2type1`, t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads)
+    .Call(`_BIRDMAN_p2type1`, t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads)
 }
 
 #' p2type2
@@ -48,6 +48,6 @@ p2type1 <- function(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1L, th
 #'   (0,0) is included.
 #'
 p2type2 <- function(t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1L, threads = 1L) {
-    .Call(`_bdmsim_p2type2`, t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads)
+    .Call(`_BIRDMAN_p2type2`, t, dom, alpha1, beta1, nu, alpha2, beta2, ancestors, threads)
 }
 
