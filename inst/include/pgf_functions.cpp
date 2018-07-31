@@ -123,9 +123,6 @@ std::complex<double> gamma0(std::complex<double> y, double alpha2, double nu)
 
 std::complex<double> pgf2_crit(std::complex<double> x, std::complex<double> y, double t, double alpha1, double alpha2, double nu)
 {
-  const double a = alpha1 / alpha2;
-  const double b = nu / alpha2;
-
   const std::complex<double> gam0 = gamma0(y, alpha2, nu);
   std::complex<double> C2_crit = (alpha2 * ac_hyp1f1(1 + alpha1 / alpha2, 1 + nu / alpha2, gam0) - alpha2 * (1.0 - x) * ac_hyp1f1(alpha1 / alpha2, nu / alpha2, gam0) ) /
     (nu * ac_hyperu(1 + alpha1 / alpha2, 1 + nu / alpha2, gam0) + alpha2 * (1.0 - x) * ac_hyperu(alpha1 / alpha2, nu / alpha2, gam0) );

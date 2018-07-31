@@ -108,29 +108,34 @@ devtools::install_git("git://github.com/Michorlab/BIRDMAN.git")
 
 # Uses
 
-BIRDMAN provides functions to numerically calculate the probability generating function and mass function for
-the two-type birth-death-mutation process. Individuals of type 1 may split, die, or split into one type 1 and
-one type 2 with rates $\alpha_1$, $\beta_1$, $\nu$ respectively. Type 2 individuals may split or die with
-rates $\alpha_2$ and $\beta_2$.
+BIRDMAN provides functions to numerically calculate the probability mass function  via the  probability generating function and a 2 dimensional Inverse Fast Fourier Transform for the two-type birth-death-mutation process. Individuals of type 1 may split into 2 type 1, die, or split into one type 1 and one type 2 with rates $\alpha_1$, $\beta_1$, $\nu$ respectively under model 2 and tranform into a single type 2 individual at rate $\nu$ with model 1. Type 2 individuals may split or die with rates $\alpha_2$ and $\beta_2$.
 
-To create a distribution as a matrix of size $2^dom \times 2^dom$ for a process stopped at time $t$,
-run the following function
+To create a distribution as a matrix of size $dom \times dom$ for a process stopped at time $t$,
+run the following functions:
+
+Model 1: Type 1 -> Type 2 with rate $\nu$
 ~~~
-x <- p2type(t, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, dom = dom)
+x <- p2type1(t, dom = dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, threads = num_threads)
 ~~~
-The variable `x` now stores a matrix where element $(i,j)$ represents $P(Z_1(t) = j-1, Z_2(t) = i-1)$. Note
-the variable is one off due to R beginning counting at 1 instead of 0.
+Model 2: Type 1 -> Type 1 + Type 2 with rate $\nu$
+~~~
+x <- p2type2(t, dom = dom, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, threads = num_threads)
+~~~
+The variable `x` now stores a matrix where element $(i,j)$ represents $P(Z_1(t) = j-1, Z_2(t) = i-1)$. Note: the variable is one off due to R believing that arrays start at 1 instead of 0.
 
-If your compiler supports OpenMP, the argument `threads = ` sets the number of threads the PGF calculation
-will run on, significantly increasing speed.
+If your compiler supports OpenMP, the argument `threads = ` sets the number of threads the PGF calculation will run on, significantly increasing speed.
 
-To generate random values from the process, the function `r2type` gets realizations as vectors of length
-2 by drawing from the provided PDF.
+Finally, we include a simple Stochastic Simulation Algorithm code with `ssa`that
+allows multiple simulations using the SSA algorithm under model 1 and 2 respectively
+which are parameters for the function. A run with model 2 looks as follows:
+~~~
+x <- ssa(t, alpha1, beta1, nu, alpha2, beta2, ancestors = c(1, 0), model = 2)
+~~~
+
 
 # Important Notes
 * Converting from the PGF solutions to a probability mass function uses a 2D Discrete Fast Fourier Transform
 that requires computing values for the $dom \times dom$ matrix. This can be costly for speed memory. Selecting
 dom too low can be inaccurate and dom too high can take a lot of time. In cases where t is large for
-supercritical growth, or there is a high probability for large `dom` values, other methods such as simulation
-with the Gillespie algorithm may be preferable.
+supercritical growth, or there is a high probability for large `dom` values, other methods such as simulation with the Gillespie algorithm may be preferable at the cost of less exact solutions.
 * Setting too many threads from OpenMP can cause slowdowns as well.

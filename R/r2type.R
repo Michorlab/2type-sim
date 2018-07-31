@@ -62,43 +62,88 @@ r2type <- function(N, pdf, ancestors = 1)
   cbind(colSums(matrix(x, nrow = ancestors)), colSums(matrix(y, nrow = ancestors)))
 }
 
-#' rbdm
+#' ssa.single
 #' 
-#' rbdm generates a 2-type birth-death-mutation process given the rate parameters
-#' and returns basic summary statistics, the distribution function used, and the
-#' simulated data.
+#' ssa.single generates a single run from the Stochastic Simulation Algorithm
+#' under model 1 or 2. This can be used to compare to a distribution created in
+#' the package.
 #' 
-#' Use this to generate many complete birth-death-mutation process
-#' 
-#' @param t time to simulate
-#' @param N number of samples to generate
-#' @param alpha1 type 1 split rate
+#' @param t time of simulation
+#' @param alpha1 type 1 birth rate
 #' @param beta1 type 1 death rate
-#' @param nu type 1 mutation rate (Note: not a probability!)
-#' @param alpha2 type 2 split rate
+#' @param nu type 1 mutation rate (model 1 generates a single type 2 and model 2 generates a type 1 and type 2)
+#' @param alpha2 type 2 birth rate
 #' @param beta2 type 2 death rate
-#' @param ancestors number of ancestors
-#' @param model which model to simulate (1 = mutation without split, 2 = mutation with split)
-
-
-#' @return matrix of randomly generated 2-dimensional values
+#' @param ancestors 2-element vector of number of ancestors
+#' @param model 1 or 2 for the model used
+#' 
+#' 
+#' @return 2-element vector containing the number of type 1 and type 2 individuals
 #' 
 #' @export
-rbdm <- function(t, N, alpha1, beta1, nu, alpha2, beta2, ancestors = 1, model = 2)
+ssa.single <- function(t, alpha1, beta1, nu, alpha2, beta2, ancestors = c(1, 0), model = 2)
 {
-  # Determine expectation and variances
-  mean = c(m1(t, ancestors, alpha1, beta1, nu, alpha2, beta2),
-           m2(t, ancestors, alpha1, beta1, nu, alpha2, beta2))
-  variance = c(var1(t, ancestors, alpha1, beta1, nu, alpha2, beta2),
-               var2(t, ancestors, alpha1, beta1, nu, alpha2, beta2))
-  # TODO use mean and variance to get idea of expected growth in order
-  # to adaptively reduce the space since can probably only generate
-  # up to 2^11 or 2^12 maximum at a time
-  
-  # Generate distribution function
-  # NOTE: make domain_size adaptive based on mean and variance
-  pdf = p2type2(t, domain_size = 100, alpha1, beta1, nu, alpha2, beta2, 1)
-  # return simulated values
-  # NOTE: create class/list to return including mean, etc.
-  r2type(N, pdf, ancestors)
+  curr_time <- 0
+  z <- ancestors
+  rate <- z[1] * (alpha1 + beta1 + nu) + z[2] * (alpha2 + beta2)
+  while(curr_time < t & sum(z) > 0)
+  {
+    curr_time <- curr_time + rexp(1, rate)
+    
+    if(curr_time > t) break
+    
+    u <- runif(1, 0, rate)
+    if(u <= z[1] * alpha1)
+    {
+      z[1] <- z[1] + 1
+      rate <- rate + (alpha1 + beta1 + nu)
+    }
+    else if(u <= z[1] * (alpha1 + beta1))
+    {
+      z[1] <- z[1] - 1
+      rate <- rate - (alpha1 + beta1 + nu)
+    }
+    else if(model == 1 & u <= z[1] * (alpha1 + beta1 + nu))
+    {
+      z[1] <- z[1] - 1
+      z[2] <- z[2] + 1
+      rate <- rate + (alpha2 + beta2) - (alpha1 + beta1 + nu)
+    }
+    else if(u <= z[1] * (alpha1 + beta1 + nu) + z[2] * alpha2)
+    {
+      z[2] <- z[2] + 1
+      rate <- rate + (alpha2 + beta2)
+    }
+    else
+    {
+      z[2] <- z[2] - 1
+      rate <- rate - (alpha2 + beta2)
+    }
+  }
+  z
+}
+
+#' ssa
+#' 
+#' ssa generates multiple runs from the Stochastic Simulation Algorithm
+#' under model 1 or 2. This can be used to compare to a distribution created in
+#' the package.
+#' 
+#' @param N number of runs to generate
+#' @param t time of simulation
+#' @param alpha1 type 1 birth rate
+#' @param beta1 type 1 death rate
+#' @param nu type 1 mutation rate (model 1 generates a single type 2 and model 2 generates a type 1 and type 2)
+#' @param alpha2 type 2 birth rate
+#' @param beta2 type 2 death rate
+#' @param ancestors 2-element vector of number of ancestors
+#' @param model 1 or 2 for the model used
+#' 
+#' 
+#' @return 2-element vector containing the number of type 1 and type 2 individuals
+#' 
+#' @export
+ssa <- function(N = 1, t, alpha1, beta1, nu, alpha2, beta2, ancestors = c(1, 0), model = 2)
+{
+  t(replicate(N, ssa.single(t, alpha1, beta1, nu, alpha2, beta2, ancestors, model)))
 }

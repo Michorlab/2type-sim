@@ -12,4 +12,4 @@ LinkingTo: Rcpp
 NeedsCompilation: yes
 URL: https://github.com/Michorlab/BIRDMAN
 BugReports: https://github.com/Michorlab/BIRDMAN/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
